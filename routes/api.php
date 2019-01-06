@@ -13,6 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('config',function (){
+    phpinfo();
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+/******************************************************************************
+
+Little
+ *
+ ******************************************************************************/
+Route::group([
+    'prefix' => '/v1/',
+    'namespace'     => 'Little',
+    'middleware' => [],
+], function () {
+//    init
+    Route::any('little', ['uses'=>'LittleController@index',                 'middleware' => []]);
+});
+
+
+
