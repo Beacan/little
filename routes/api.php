@@ -32,6 +32,10 @@ Route::group([
 ], function () {
 //    init
     Route::any('little', ['uses'=>'LittleController@index',                 'middleware' => []]);
+    Route::any('connect', ['uses'=>'LittleController@connect',                 'middleware' => []]);
+    Route::any('send_message', ['uses'=>'LittleController@sendMessage',                 'middleware' => []]);
+
+
 });
 
 

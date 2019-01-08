@@ -1,0 +1,2 @@
+2019-01-08 00:15:51 pid:1 Bad request for Register service. Request info(IP:127.0.0.1, Request Buffer:GET / HTTP/1.1). See http://wiki.workerman.net/Error4 for detail
+2019-01-08 00:17:21 pid:1 Bad request for Register service. Request info(IP:127.0.0.1, Request Buffer:GET / HTTP/1.1). See http://wiki.workerman.net/Error4 for detail

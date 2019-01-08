@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button id="connect">connect</button>
+    <button id="send">send"123"</button>
+</body>
+</html>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    var ws, name;
+    ws = new WebSocket("ws://"+document.domain+":8585");
+
+    $(document).ready(function () {
+        $("#connect").click(function () {
+        });
+
+        $("#send").click(function () {
+        });
+
+
+    });
+    name = '1';
+    // ws = new WebSocket("ws://"+document.domain+":8585");
+    ws.onopen = function($data){
+        console.log($data)
+    };
+    // 当有消息时根据消息类型显示不同信息
+    ws.onmessage = onmessage;
+    ws.onclose = function() {
+        console.log("连接关闭，定时重连");
+    };
+    ws.onerror = function() {
+        console.log("出现错误");
+    };
+
+    // 服务端发来消息时
+    function onmessage(e)
+    {
+        console.log(e)
+        var data = eval("("+e.data+")");
+        switch(data['type']){
+            // 服务端ping客户端
+            case 'ping':
+                ws.send('{"type":"pong"}');
+                break;
+            // 登录 更新用户列表
+            case 'login':
+                console.log(data.client_id);
+                $.get("http://127.0.0.220/api/v1/connect", {
+                    'client_id': data.client_id},
+                    function(data){
+                    console.log(data)
+                    },
+                    'json');
+                break;
+            // 发言
+            case 'say':
+                console.log(data);
+                break;
+            case 'online':
+                break;
+            // 用户退出 更新用户列表
+            case 'logout':
+        }
+    }
+    function onlinelist(data){
+    }
+    function say(data){
+
+        $("#msgbox").append(s);
+    }
+</script>
