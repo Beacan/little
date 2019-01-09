@@ -27,11 +27,15 @@
     // ws = new WebSocket("ws://"+document.domain+":8585");
     ws.onopen = function($data){
         console.log($data)
+//        setInterval(show,3000);
     };
+    function show(){
+        ws.send('heart beat\n');
+    }
     // 当有消息时根据消息类型显示不同信息
     ws.onmessage = onmessage;
     ws.onclose = function() {
-        console.log("连接关闭，定时重连");
+        console.log("连接关闭，定时重连"+Math.random());
     };
     ws.onerror = function() {
         console.log("出现错误");
@@ -40,26 +44,26 @@
     // 服务端发来消息时
     function onmessage(e)
     {
-        console.log(e)
         var data = eval("("+e.data+")");
+        console.log(data)
         switch(data['type']){
             // 服务端ping客户端
             case 'ping':
-                ws.send('{"type":"pong"}');
+//                ws.send('{"type":"pong"}');
                 break;
             // 登录 更新用户列表
             case 'login':
-                console.log(data.client_id);
-                $.get("http://127.0.0.220/api/v1/connect", {
-                    'client_id': data.client_id},
-                    function(data){
-                    console.log(data)
-                    },
-                    'json');
+//                console.log(data.client_id);
+//                $.get("http://127.0.0.1:8000/api/v1/connect", {
+//                    'client_id': data.client_id},
+//                    function(data){
+//                    console.log(data)
+//                    },
+//                    'json');
                 break;
             // 发言
             case 'say':
-                console.log(data);
+//                console.log(data);
                 break;
             case 'online':
                 break;

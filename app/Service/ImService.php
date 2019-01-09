@@ -15,10 +15,10 @@ class ImService
     public function connect($clientId)
     {
         $data = array(
-            'type'=>'login',
+            'type'=>'say',
             'client_id'=>$clientId,
         );
-        Gateway::sendToClient($clientId, json_encode($data));
+        Gateway::sendToAll(json_encode($data));
 
     }
 
