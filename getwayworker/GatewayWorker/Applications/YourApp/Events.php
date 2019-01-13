@@ -20,7 +20,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
-
+use GatewayWorker\Lib\Db;
 /**
  * 主逻辑
  * 主要是处理 onConnect onMessage onClose 三个方法
@@ -36,43 +36,25 @@ class Events
      */
     public static function onConnect($client_id)
     {
+//        $rt = Db::instance('db')->query('select * from user');
+        $now = date('Y-m-d H:i:s',time());
+        $user_id = 2;
+        $session_id = md5($user_id.time());
+        $_SESSION['hhid'] = $session_id;
+        $rt = Db::instance('db')->query("
+            insert into login_record(user_id,created_at,status,session_id) 
+            values('{$user_id}','{$now}',1,'{$session_id}') ");
         $data = array(
             'type'=>'login',
             'client_id'=>$client_id,
+            'sss'=>$rt
         );
         Gateway::sendToAll(json_encode($data));
         // 向所有人发送
     }
     public static function onMessage($client_id, $message)
     {
-        $message_data = json_decode($message, true);
-        if(!$message_data)
-        {
-            return false;
-        }
-        $data = array(
-            'type'=>'say',
-            'client_id'=>$client_id.' close',
-        );
-        // 根据类型执行不同的业务
-        switch($message_data['type'])
-        {
-            // 客户端回应服务端的心跳
-            case 'pong':
-                return false;
-            // 客户端登录 message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
-            case 'login':
-                // 判断是否有房间号
-                if(!isset($message_data['room_id']))
-                {
-                    throw new \Exception("\$message_data['room_id'] not set. client_ip:{$_SERVER['REMOTE_ADDR']} \$message:$message");
-                }
-                Gateway::sendToAll($data);
-
-            // 客户端发言 message: {type:say, to_client_id:xx, content:xx}
-            case 'say':
-
-        }
+        
     }
 
     /**
@@ -85,6 +67,10 @@ class Events
             'type'=>'say',
             'client_id'=>$client_id.' close',
         );
+        $now = date('Y-m-d H:i:s',time());
+        $session_id = $_SESSION['hhid'];
+        $rs = Db::instance('db')->query("
+            update login_record set updated_at = '{$now}',status = 2 where session_id = '{$session_id}'");
         Gateway::sendToAll($data);
     }
 }

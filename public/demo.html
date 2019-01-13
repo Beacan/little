@@ -5,8 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <button id="connect">connect</button>
-    <button id="send">send"123"</button>
+
 </body>
 </html>
 <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
@@ -14,15 +13,6 @@
     var ws, name;
     ws = new WebSocket("ws://"+document.domain+":8585");
 
-    $(document).ready(function () {
-        $("#connect").click(function () {
-        });
-
-        $("#send").click(function () {
-        });
-
-
-    });
     name = '1';
     // ws = new WebSocket("ws://"+document.domain+":8585");
     ws.onopen = function($data){
@@ -49,7 +39,7 @@
         switch(data['type']){
             // 服务端ping客户端
             case 'ping':
-//                ws.send('{"type":"pong"}');
+               ws.send('{"type":"pong"}');
                 break;
             // 登录 更新用户列表
             case 'login':
