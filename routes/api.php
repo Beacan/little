@@ -32,8 +32,16 @@ Route::group([
 ], function () {
 //    init
     Route::any('little', ['uses'=>'LittleController@index',                 'middleware' => []]);
+//  计算生成token 计算离线奖励 生成登录记录
     Route::any('connect', ['uses'=>'LittleController@connect',                 'middleware' => []]);
-    Route::any('send_message', ['uses'=>'LittleController@sendMessage',                 'middleware' => []]);
+//  获取等级怪物列表
+    Route::any('get_master', ['uses'=>'LittleController@getMaster',                 'middleware' => []]);
+//  杀死怪物
+    Route::any('kill_master', ['uses'=>'LittleController@killMaster',                 'middleware' => []]);
+
+//    Route::any('send_message', ['uses'=>'LittleController@sendMessage',                 'middleware' => []]);
+
+
 
 
 });

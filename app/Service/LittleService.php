@@ -37,11 +37,11 @@ class LittleService
         $masters = $query->get()->toArray();
         return $masters;
     }
-    public function getUserInfo($user_id)
+    public function getUserInfo($openid)
     {
         $userInfo = User::leftJoin('user_weapon','user_weapon.user_id','=','user.id')
             ->leftJoin('weapon','user_weapon.weapon_id','=','weapon.id')
-            ->where('user.id','=',$user_id)
+            ->where('user.openid','=',$openid)
             ->where('user.status','=',Constant::EFFECT)
             ->where('weapon.status','=',Constant::EFFECT)
             ->select(
@@ -60,12 +60,25 @@ class LittleService
         //上线时计算离线奖励
         $loginReward = LoginRecord::where('user_id',$user_id)
             ->where('status',Constant::OFFLINE)
+            ->orderBy('id','DESC')
             ->first();
+
         if(!$loginReward){
             return false;
         }
         $offLineAward = (time() - strtotime($loginReward->updated_at)) * Constant::OFFLINT_AWARD;
         $res = User::where('id',$user_id)->increment('cron',$offLineAward);
+        if($res){
+            LoginRecord::where('id','=',$loginReward->id)->update(['status'=>3]);
+        }
+
         return $res;
+    }
+
+    public function killMaster($masterId)
+    {
+        $userId = $_SESSION['userId'];
+
+        return true;
     }
 }

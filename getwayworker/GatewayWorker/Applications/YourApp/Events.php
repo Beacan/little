@@ -36,20 +36,14 @@ class Events
      */
     public static function onConnect($client_id)
     {
-//        $rt = Db::instance('db')->query('select * from user');
-        $now = date('Y-m-d H:i:s',time());
-        $user_id = 2;
-        $session_id = md5($user_id.time());
+        $session_id = md5('little'.time());
         $_SESSION['hhid'] = $session_id;
-        $rt = Db::instance('db')->query("
-            insert into login_record(user_id,created_at,status,session_id) 
-            values('{$user_id}','{$now}',1,'{$session_id}') ");
         $data = array(
             'type'=>'login',
             'client_id'=>$client_id,
-            'sss'=>$rt
+            'hhid'=>$_SESSION['hhid']
         );
-        Gateway::sendToAll(json_encode($data));
+        Gateway::sendToClient($client_id,json_encode($data));
         // 向所有人发送
     }
     public static function onMessage($client_id, $message)

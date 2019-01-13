@@ -39,17 +39,20 @@
         switch(data['type']){
             // 服务端ping客户端
             case 'ping':
-               ws.send('{"type":"pong"}');
+               // ws.send('{"type":"pong"}');
                 break;
             // 登录 更新用户列表
             case 'login':
 //                console.log(data.client_id);
-//                $.get("http://127.0.0.1:8000/api/v1/connect", {
-//                    'client_id': data.client_id},
-//                    function(data){
-//                    console.log(data)
-//                    },
-//                    'json');
+               $.get("http://127.0.0.220/api/v1/connect", {
+                   'client_id': data.client_id,
+                   'hhid': data.hhid
+
+                   },
+                   function(data){
+                   console.log(data)
+                   },
+                   'json');
                 break;
             // 发言
             case 'say':

@@ -25,17 +25,26 @@ class LittleController extends BaseController
     public function connect(Request $request)
     {
         $clientId = $request->input('client_id');
+        $openid = $request->input('openid');
+        $hhid = $request->input('hhid');
 
-        $this->imService->connect($clientId);
-        return Response()->json(['data'=>$clientId]);
+        $res = $this->imService->connect($clientId,$openid,$hhid);
+        return Response()->json(['data'=>$res]);
     }
 
-    public function sendMessage(Request $request)
+    public function getMaster(Request $request)
+    {
+        $level = $request->input('level');
+
+        $res = $this->littleService->getMaster($level);
+        return Response()->json(['data'=>$res]);
+    }
+    public function killMaster(Request $request)
     {
 
-        $clientId = $request->input('client_id');
-        $this->imService->sendMessage($clientId);
-        return Response()->json(['data'=>$clientId]);
+        $masterId = $request->input('masterId');
+        $res = $this->littleService->killMaster($masterId);
+        return Response()->json(['data'=>$res]);
 
     }
 }
